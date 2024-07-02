@@ -6,6 +6,7 @@
 #include "../utils/utils.h"
 
 extern const char *INSUFICIENT_MEMORY, *GRAPH_TYPE, *NODE_TYPE, *NO_ERROR;
+extern data_type_t DB_INT;
 
 graph_t *new_graph(types_t type) {
 	graph_t *Graph = (graph_t*) malloc(sizeof(graph_t));
@@ -46,15 +47,15 @@ result_t *graph_insert_node(graph_t *graph, bool isTerminal) {
 	return result;
 }
 
-result_t *graph_insert_edge(graph_t *graph, int id1, int id2, void *weight) {
+result_t *graph_insert_edge(graph_t *graph, int id1, int id2, const char *weight) {
 	int *ptr_id1 = new_int(id1);
 	result_t *result = linked_list_get(*graph->nodes, ptr_id1);
 	if(!result->isSuccess)
 		return result;
 
 	node_t *parent = (node_t*) result->value;
-	tuple_t *tuple = new_tuple(graph->type, weight, new_int(id2));
-	result = node_insert_child(parent, tuple);
+	pair_t *pair = new_pair(weight, new_mdb_type(&DB_INT, new_int(id2)));
+	result = node_insert_child(parent, pair);
 	return result;
 }
 
@@ -85,23 +86,16 @@ result_t *graph_get_node(graph_t graph, int id) {
 
 char *graph_to_string(const graph_t graph) {
 	char *string = (char*) malloc(STRINGIFY_OBJECT_SIZE);
-	int i = sprintf(string, "G["), x = 0;
+	int i = sprintf(string, "{"), x = 0;
 	int size = graph.size;
 	simple_node_t *reference = graph.nodes->begin;
 	while(reference != NULL) {
-		node_t *node = (node_t*) reference->value;
-		i += sprintf(string + i, "|%d:%s -> [", node->id, node->isTerminal ? "T": "NT");
-		for(int y = 0; y < node->children; y++) {
-			i += sprintf(string + i, "(%s, %d)", to_string(graph.type, node->nodes[y]->value1), node->id);
-			if(y < node->children)
-				i += sprintf(string + i, ", ");
-		}
-		i += sprintf(string +i, "]|");
+		i += sprintf(string + i, "%s", node_to_string(*((node_t*)reference->value)));
 		if(++x < size)
 			i += sprintf(string + i, ", ");
 		reference = reference->next;
 	}
-	string[i++] = ']';
+	string[i++] = '}';
 	string[i] = '\0';
 	return string;
 }

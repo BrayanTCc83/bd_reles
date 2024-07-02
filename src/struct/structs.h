@@ -40,11 +40,6 @@ typedef struct Hash_map_t {
 	linked_list_t **list;
 	int size;
 } hash_map_t;
-// SET
-typedef struct Set_t {
-	types_t type;
-	linked_list_t *list;
-} set_t;
 // BINARY NODE
 typedef struct Binary_node_t binary_node_t;
 struct Binary_node_t {
@@ -58,14 +53,18 @@ typedef struct Binary_tree_t {
 	binary_node_t *root;
 	int size;
 } binary_tree_t;
+// SET
+typedef struct Set_t {
+	types_t type;
+	linked_list_t *list;
+} set_t;
 // N NODE
 typedef struct Node_t node_t;
 struct Node_t {
 	types_t type;
 	bool isTerminal;
 	int id;
-	int children;
-	tuple_t **nodes; // {type, weight, next}
+	linked_list_t *children; // {type, weight, next}
 };
 // GRAPH
 typedef struct Graph_t {
@@ -141,6 +140,8 @@ char *binary_node_to_string(binary_node_t);	// (A) -> {.left = B, .right = C}
 binary_tree_t *new_binary_tree(types_t);
 binary_tree_t *clone_binary_tree(const binary_tree_t);
 compare_result_t compare_binary_tree(binary_tree_t, binary_tree_t);
+binary_tree_t *binary_tree_join(binary_tree_t, binary_tree_t);
+linked_list_t *binary_tree_to_list(binary_tree_t);
 void delete_binary_tree(binary_tree_t*);
 result_t *binary_tree_insert(binary_tree_t*, void*);
 result_t *binary_tree_find(binary_tree_t, void*);
@@ -151,7 +152,7 @@ node_t *new_node(types_t, bool, int);
 compare_result_t compare_node(node_t*, int);
 node_t *clone_node(const node_t);
 void delete_node(node_t*);
-result_t *node_insert_child(node_t*, tuple_t*);
+result_t *node_insert_child(node_t*, pair_t*);
 result_t *node_remove_child_by_weight(node_t*, void*);
 result_t *node_remove_child_by_id(node_t*, int);
 result_t *node_clear_children(node_t*);
@@ -162,7 +163,7 @@ graph_t *clone_graph(const graph_t);
 compare_result_t compare_graph(graph_t, graph_t);
 void delete_graph(graph_t*);
 result_t *graph_insert_node(graph_t*, bool);			// {id:(T|NT)} -> []
-result_t *graph_insert_edge(graph_t*, int, int, void*);		// {id1 -(W)-> id2}
+result_t *graph_insert_edge(graph_t*, int, int, const char*);		// {id1 -(W)-> id2}
 result_t *graph_remove_node(graph_t*, int);
 result_t *graph_remove_edge(graph_t*, int, int);
 result_t *graph_get_node(const graph_t, int);

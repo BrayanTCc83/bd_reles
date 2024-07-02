@@ -36,11 +36,52 @@ static void _binary_tree_clone_recursive(binary_tree_t *tree, binary_node_t node
 
 binary_tree_t *clone_binary_tree(const binary_tree_t tree) {
 	binary_tree_t *BinaryTree = new_binary_tree(tree.type);
-
-	BinaryTree->root = clone_object(BINARY_NODE, tree.root);
-	BinaryTree->size++;
+	if(!tree.root)
+		return BinaryTree;
+	binary_tree_insert(BinaryTree, tree.root->value);
 	_binary_tree_clone_recursive(BinaryTree, *tree.root);
 	return BinaryTree;
+}
+
+binary_tree_t *binary_tree_join(binary_tree_t tree1, binary_tree_t tree2) {
+	binary_tree_t *Tree = clone_binary_tree(tree1);
+	if(tree2.root)
+		_binary_tree_clone_recursive(Tree, *tree2.root);
+	return Tree;
+}
+
+static void _delete_binary_node_recursive(binary_node_t *node) {
+	if(node->left)
+		delete_binary_node(node->left);
+	if(node->right)
+		delete_binary_node(node->right);
+	delete_binary_node(node);
+}
+
+void delete_binary_tree(binary_tree_t *tree) {
+	_delete_binary_node_recursive(tree->root);
+	tree->root = NULL;
+	tree->size = 0;
+	free(tree);
+}
+
+static void _binary_tree_to_list_recursive(linked_list_t *list, binary_node_t node) {
+	if(node.left != NULL) {
+		linked_list_push(list, node.left->value);
+		_binary_tree_to_list_recursive(list, *node.left);
+	}
+	if(node.right != NULL) {
+		linked_list_push(list, node.right->value);
+		_binary_tree_to_list_recursive(list, *node.right);
+	}
+}
+
+linked_list_t *binary_tree_to_list(binary_tree_t tree) {
+	linked_list_t *List = new_linked_list(tree.type);
+	if(tree.root != NULL)
+		linked_list_push(List, tree.root->value);
+	_binary_tree_to_list_recursive(List, *tree.root);
+	return List;
 }
 
 static compare_result_t _compare_binary_node_recursive(binary_node_t node1, binary_node_t node2) {
@@ -79,13 +120,19 @@ result_t *binary_tree_insert(binary_tree_t *tree, void *value) {
 
 	binary_node_t *reference = tree->root, *previus = NULL;
 	compare_result_t cmp = DIFFERENT;
+	
 	while(reference != NULL) {
 		cmp = compare_objects(tree->type, reference->value, value);
 		previus = reference;
 		if(cmp == LESS)
 			reference = reference->right;
-		else
+		else if(cmp == GREAT)
 			reference = reference->left;
+		else {
+			result->isSuccess = false;
+			strcmp(result->error, "El elemento ya se encuentra dentro del arbol.");
+			return result;
+		}
 	}
 
 	if(previus == NULL) {
