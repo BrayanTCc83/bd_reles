@@ -22,11 +22,11 @@ typedef enum Types_t {
 	UNKNOWN_TYPE,
 	// Primitives
 	CHAR, SHORT, INT, LONG, FLOAT, DOUBLE, BOOL,
-	STRING, 
+	STRING,
 	// Basics
 	MDB_TYPE,
 	// Struct basics
-	SIMPLE_NODE, BINARY_NODE, N_NODE, 
+	SIMPLE_NODE, BINARY_NODE, N_NODE,
 	TUPLE, PAIR,
 	// Data Structs
 	LINKED_LIST, HASH_MAP, SET,
@@ -36,19 +36,15 @@ typedef enum Types_t {
 // Macros
 #define PrintError(format, ...)  {printf(format, __VA_ARGS__); exit(1);}
 #define Stringify(type) 	 #type
-#define Typify(x) 		 _Generic((x), 				\
-		bool: BOOL,		char: CHAR, 			\
-		short: SHORT, 		int: INT, 			\
-		long: LONG,		float: FLOAT,			\
-		double: DOUBLE, 	char*: STRING,			\
-		result_t: RESULT_T, 	result_t*: RESULT,		\
-		mdb_type_t: MDB_TYPE_T, mdb_type_t*: MDB_TYPE,	\
-		pair_t: PAIR_T,		pair_t*: PAIR,		\
-		simple_node_t: SIMPLE_NODE_T,	simple_node_t*: SIMPLE_NODE, \
-		linked_list_t: LINKED_LIST_T,	linked_list_t*: LINKED_LIST, \
-		hash_map_t: HASH_MAP_T,	hash_map_t*: HASH_MAP,	\
-		set_t: SET_T, 		set_t*: SET,			\
-		default: UNKNOWN_TYPE)
+#define Typify(x) 		 _Generic((x), 					\
+		bool: BOOL,			char: CHAR, 			\
+		short: SHORT, 			int: INT, 			\
+		long: LONG,			float: FLOAT,			\
+		double: DOUBLE, 		char*: STRING,			\
+		result_t*: RESULT,		mdb_type_t*: MDB_TYPE,		\
+		pair_t*: PAIR,			simple_node_t*: SIMPLE_NODE, 	\
+		linked_list_t*: LINKED_LIST, 	hash_map_t*: HASH_MAP,		\
+		set_t*: SET,			default: UNKNOWN_TYPE)
 
 // Structs
 typedef struct Result_t {
