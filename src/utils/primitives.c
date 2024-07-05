@@ -6,59 +6,67 @@
 extern const char *INSUFICIENT_MEMORY, *CHAR_TYPE, *SHORT_TYPE, *INTEGER_TYPE;
 extern const char *LONG_TYPE, *FLOAT_TYPE, *DOUBLE_TYPE, *STRING_TYPE;
 
-char *new_char(char byte) {
-	char *NewChar = (char*) malloc(sizeof(char));
+Char *new_char(char byte) {
+	Char *NewChar = (Char*) malloc(sizeof(Char));
 	if(NewChar == NULL)
 		PrintError(INSUFICIENT_MEMORY, CHAR_TYPE);
-	*NewChar = byte;
+	NewChar->o = CHAR;
+	NewChar->value = byte;
 	return NewChar;
 }
 
-short *new_short(short integer) {
-	short *NewShort = (short*) malloc(sizeof(short));
+Short *new_short(short integer) {
+	Short *NewShort = (Short*) malloc(sizeof(Short));
 	if(NewShort == NULL)
 		PrintError(INSUFICIENT_MEMORY, INTEGER_TYPE);
-	*NewShort = integer;
+	NewShort->o = SHORT;
+	NewShort->value = integer;
 	return NewShort;
 }
 
-int *new_int(int integer) {
-	int *NewInt = (int*) malloc(sizeof(int));
+Int *new_int(int integer) {
+	Int *NewInt = (Int*) malloc(sizeof(Int));
 	if(NewInt == NULL)
 		PrintError(INSUFICIENT_MEMORY, INTEGER_TYPE);
-	*NewInt = integer;
+	NewInt->o = INT;
+	NewInt->value = integer;
 	return NewInt;
 }
 
-long *new_long(long integer) {
-	long *NewLong = (long*) malloc(sizeof(long));
+Long *new_long(long integer) {
+	Long *NewLong = (Long*) malloc(sizeof(Long));
 	if(NewLong == NULL)
 		PrintError(INSUFICIENT_MEMORY, INTEGER_TYPE);
-	*NewLong = integer;
+	NewLong->o = LONG;
+	NewLong->value = integer;
 	return NewLong;
 }
 
-float *new_float(float real) {
-	float *NewFloat = (float*) malloc(sizeof(float));
+Float *new_float(float real) {
+	Float *NewFloat = (Float*) malloc(sizeof(Float));
 	if(NewFloat == NULL)
 		PrintError(INSUFICIENT_MEMORY, INTEGER_TYPE);
-	*NewFloat = real;
+	NewFloat->o = FLOAT;
+	NewFloat->value = real;
 	return NewFloat;
 }
 
-double *new_double(double real) {
-	double *NewDouble = (double*) malloc(sizeof(double));
+Double *new_double(double real) {
+	Double *NewDouble = (Double*) malloc(sizeof(Double));
 	if(NewDouble == NULL)
 		PrintError(INSUFICIENT_MEMORY, INTEGER_TYPE);
-	*NewDouble = real;
+	NewDouble->o = DOUBLE;
+	NewDouble->value = real;
 	return NewDouble;
 }
 
-char *new_string(const char *string) {
-	char *NewString = (char*) malloc(strlen(string) + 1);
+String *new_string(const char *string) {
+	String *NewString = (String*) malloc(sizeof(String));
 	if(NewString == NULL)
 		PrintError(INSUFICIENT_MEMORY, INTEGER_TYPE);
-	strcpy(NewString, string);
+	NewString->o = STRING;
+	NewString->value = (char*) malloc(strlen(string) + 1);
+	strcpy(NewString->value, string);
 	return NewString;
 }
 

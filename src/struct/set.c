@@ -14,6 +14,7 @@ set_t *new_set(types_t type) {
 	if(Set == NULL)
 		PrintError(INSUFICIENT_MEMORY, SET_TYPE);
 
+	Set->o = SET;
 	Set->type = type;
 	Set->list = new_linked_list(type);
 	return Set;
@@ -43,7 +44,7 @@ result_t *set_insert(set_t *set, void *value) {
 	result_t *result = new_result(TRUE, true, NO_ERROR);
 
 	simple_node_t *reference = set->list->begin;
-	while(reference != NULL && compare_objects(set->type, reference->value, value) != EQUALS)
+	while(reference != NULL && compare_objects(reference->value, value) != EQUALS)
 		reference = reference->next;
 
 	if(reference != NULL) {
@@ -123,7 +124,7 @@ set_t *set_cross_product(set_t set1, set_t set2) {
 	while(node1 != NULL) {
 		simple_node_t *node2 = set2.list->begin;
 		while(node2 != NULL) {
-			set_insert(NewSet, merge_objects(set1.type, node1->value, node2->value));
+			set_insert(NewSet, merge_objects(node1->value, node2->value));
 			node2 = node2->next;
 		}
 		node1 = node1->next;

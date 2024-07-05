@@ -13,6 +13,7 @@ node_t *new_node(types_t type, bool isTerminal, int id) {
 	if(Node == NULL)
 		PrintError(INSUFICIENT_MEMORY, N_NODE_TYPE);
 
+	Node->o = N_NODE;
 	Node->children = new_linked_list(PAIR);
 	Node->type = type;
 	Node->isTerminal = isTerminal;

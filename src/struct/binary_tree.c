@@ -17,6 +17,7 @@ binary_tree_t *new_binary_tree(types_t type) {
 	if(BinaryTree == NULL)
 		PrintError(INSUFICIENT_MEMORY, BINARY_TREE_TYPE);
 
+	BinaryTree->o = BINARY_TREE;
 	BinaryTree->type = type;
 	BinaryTree->root = NULL;
 	BinaryTree->size = 0;
@@ -122,7 +123,7 @@ result_t *binary_tree_insert(binary_tree_t *tree, void *value) {
 	compare_result_t cmp = DIFFERENT;
 	
 	while(reference != NULL) {
-		cmp = compare_objects(tree->type, reference->value, value);
+		cmp = compare_objects(reference->value, value);
 		previus = reference;
 		if(cmp == LESS)
 			reference = reference->right;
@@ -159,7 +160,7 @@ result_t *binary_tree_find(binary_tree_t tree, void *value) {
 
 	binary_node_t *reference = tree.root;
 	compare_result_t cmp = DIFFERENT;
-	while(reference != NULL && (cmp = compare_objects(tree.type, reference->value, value)) != EQUALS) {
+	while(reference != NULL && (cmp = compare_objects(reference->value, value)) != EQUALS) {
 		if(cmp == LESS) reference = reference->right;
 		else reference = reference->left;
 	}
@@ -170,7 +171,7 @@ result_t *binary_tree_find(binary_tree_t tree, void *value) {
 		return result;
 	}
 
-	result->value = clone_object(tree.type, reference->value);
+	result->value = clone_object(reference->value);
 	return result;
 }
 
@@ -179,7 +180,7 @@ static void _binary_tree_sort_recursive(binary_node_t *parent, binary_node_t *ch
 		return;
 
 	binary_node_t *left = parent->left, *right = parent->right;
-	compare_result_t cmp = compare_objects(parent->type, parent->value, child->value);
+	compare_result_t cmp = compare_objects(parent->value, child->value);
 	if(cmp == GREAT) {
 		if(right == NULL) {
 			parent->right = child;
@@ -204,7 +205,7 @@ result_t *binary_tree_delete(binary_tree_t *tree, void *value) {
 
 	binary_node_t *reference = tree->root, *parent = NULL;
 	compare_result_t cmp = DIFFERENT;
-	while(reference != NULL && (cmp = compare_objects(tree->type, reference->value, value)) != EQUALS) {
+	while(reference != NULL && (cmp = compare_objects(reference->value, value)) != EQUALS) {
 		parent = reference;
 		if(cmp == LESS) reference = reference->right;
 		else reference = reference->left;
@@ -230,14 +231,14 @@ result_t *binary_tree_delete(binary_tree_t *tree, void *value) {
 	reference->left = reference->right = NULL;
 	_binary_tree_sort_recursive(parent, child);
 
-	result->value = clone_object(tree->type, reference->value);
+	result->value = clone_object(reference->value);
 	delete_binary_node(reference);
 	return result;
 }
 
 static char *_binary_node_recursive_to_string(binary_node_t *node) {
 	char *string = (char*) malloc(STRINGIFY_OBJECT_SIZE);
-	sprintf(string, "%s -> (%s, %s)", to_string(node->type, node->value),
+	sprintf(string, "%s -> (%s, %s)", to_string(node->value),
 		node->left != NULL ?
 		_binary_node_recursive_to_string(node->left)
 		: "_",

@@ -10,6 +10,7 @@ result_t *new_result(void *value, const bool isSuccess, const char* error) {
 	if(result == NULL)
 		PrintError(INSUFICIENT_MEMORY, RESULT_TYPE);
 
+	result->o = RESULT;
 	result->value = value;
 	result->isSuccess = isSuccess;
 	strcpy(result->error,error);

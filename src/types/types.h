@@ -24,6 +24,7 @@ typedef struct Data_type_t {
 } data_type_t;
 
 typedef struct Mdb_type_t {
+	types_t o;
 	data_type_t *type;
 	union {
 		short short_value;

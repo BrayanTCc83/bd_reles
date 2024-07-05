@@ -20,6 +20,8 @@ typedef enum Compare_result_t {
 // MDB TYPES
 typedef enum Types_t {
 	UNKNOWN_TYPE,
+	// Result
+	RESULT,
 	// Primitives
 	CHAR, SHORT, INT, LONG, FLOAT, DOUBLE, BOOL,
 	STRING,
@@ -47,29 +49,71 @@ typedef enum Types_t {
 		set_t*: SET,			default: UNKNOWN_TYPE)
 
 // Structs
+// DEFAULT OBJECT TYPE
+typedef struct Object_t {
+	types_t o;
+} object_t;
+// RESULT
 typedef struct Result_t {
+	types_t o;
 	void *value;
 	char error[ERROR_SIZE];
 	bool isSuccess;
 } result_t;
+// PRIMITIVES
+// CHAR
+typedef struct Char_t {
+	types_t o;
+	char value;
+} Char;
+// SHORT
+typedef struct Short_t {
+	types_t o;
+	short value;
+} Short;
+// INT
+typedef struct Int_t {
+	types_t o;
+	int value;
+} Int;
+// LONG
+typedef struct Long_t {
+	types_t o;
+	long value;
+} Long;
+// FLOAT
+typedef struct Float_t {
+	types_t o;
+	float value;
+} Float;
+// DOUBLE
+typedef struct Double_t {
+	types_t o;
+	double value;
+} Double;
+// STRING
+typedef struct String_t {
+	types_t o;
+	char *value;
+} String;
 
 // Functions
 // RESULT
 result_t *new_result(void*, bool, const char*);
 // OBJECT METHODS
-compare_result_t compare_objects(types_t, void*, void*);
-void *merge_objects(types_t, void*, void*);
+compare_result_t compare_objects(void*, void*);
+void *merge_objects(void*, void*);
 types_t get_merged_type(types_t);
-void *clone_object(types_t, void*);
-char *to_string(types_t, void*);
+void *clone_object(void*);
+char *to_string(void*);
 // PRIMITIVES
-char *new_char(char);
-short *new_short(short);
-int *new_int(int);
-long *new_long(long);
-float *new_float(float);
-double *new_double(double);
-char *new_string(const char*);
+Char *new_char(char);
+Short *new_short(short);
+Int *new_int(int);
+Long *new_long(long);
+Float *new_float(float);
+Double *new_double(double);
+String *new_string(const char*);
 // PRIMITIVES TO STRING
 char *char_to_string(char);
 char *short_to_string(short);

@@ -13,6 +13,7 @@ graph_t *new_graph(types_t type) {
 	if(Graph == NULL)
 		PrintError(INSUFICIENT_MEMORY, GRAPH_TYPE);
 
+	Graph->o = GRAPH;
 	Graph->nodes = new_linked_list(N_NODE);
 	Graph->type = type;
 	Graph->size = 0;
@@ -48,8 +49,8 @@ result_t *graph_insert_node(graph_t *graph, bool isTerminal) {
 }
 
 result_t *graph_insert_edge(graph_t *graph, int id1, int id2, const char *weight) {
-	int *ptr_id1 = new_int(id1);
-	result_t *result = linked_list_get(*graph->nodes, ptr_id1);
+	Int *ptr_id1 = new_int(id1);
+	result_t *result = linked_list_get(*graph->nodes, &ptr_id1->value);
 	if(!result->isSuccess)
 		return result;
 
@@ -60,8 +61,8 @@ result_t *graph_insert_edge(graph_t *graph, int id1, int id2, const char *weight
 }
 
 result_t *graph_remove_node(graph_t *graph, int id) {
-	int *ptrId = new_int(id);
-	result_t *result = linked_list_get(*graph->nodes, ptrId);
+	Int *ptrId = new_int(id);
+	result_t *result = linked_list_get(*graph->nodes, &ptrId->value);
 	if(!result->isSuccess)
 		return result;
 
@@ -72,8 +73,8 @@ result_t *graph_remove_node(graph_t *graph, int id) {
 }
 
 result_t *graph_remove_edge(graph_t *graph, int id1, int id2) {
-	int *ptrId = new_int(id1);
-	result_t *result = linked_list_get(*graph->nodes, ptrId);
+	Int *ptrId = new_int(id1);
+	result_t *result = linked_list_get(*graph->nodes, &ptrId->value);
 	if(!result->isSuccess)
 		return result;
 	node_t *parent = (node_t*) result->value;
@@ -81,7 +82,7 @@ result_t *graph_remove_edge(graph_t *graph, int id1, int id2) {
 }
 
 result_t *graph_get_node(graph_t graph, int id) {
-	return linked_list_get(*graph.nodes, new_int(id));
+	return linked_list_get(*graph.nodes, &new_int(id)->value);
 }
 
 char *graph_to_string(const graph_t graph) {

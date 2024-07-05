@@ -23,41 +23,41 @@ int main() {
 	mdb_type_t *date_value = new_mdb_type(&DB_DATE, new_string("12-01-2024"));
 	mdb_type_t *time_value = new_mdb_type(&DB_TIME, new_string("12:00:450"));
 
-	char *mdb_type_string1 = to_string(MDB_TYPE, byte_value);
+	char *mdb_type_string1 = to_string(byte_value);
 	printf("Byte Value: %s\n", mdb_type_string1);
-	char *mdb_type_string2 = to_string(MDB_TYPE, short_value);
+	char *mdb_type_string2 = to_string(short_value);
 	printf("Short Value: %s\n", mdb_type_string2);
-	char *mdb_type_string3 = to_string(MDB_TYPE, int_value);
+	char *mdb_type_string3 = to_string(int_value);
 	printf("Int Value: %s\n", mdb_type_string3);
-	char *mdb_type_string4 = to_string(MDB_TYPE, long_value);
+	char *mdb_type_string4 = to_string(long_value);
 	printf("Long Value: %s\n", mdb_type_string4);
-	char *mdb_type_string5 = to_string(MDB_TYPE, char_value);
+	char *mdb_type_string5 = to_string(char_value);
 	printf("Char Value: %s\n", mdb_type_string5);
-	char *mdb_type_string6 = to_string(MDB_TYPE, float_value);
+	char *mdb_type_string6 = to_string(float_value);
 	printf("Float Value: %s\n", mdb_type_string6);
-	char *mdb_type_string7 = to_string(MDB_TYPE, double_value);
+	char *mdb_type_string7 = to_string(double_value);
 	printf("Double Value: %s\n", mdb_type_string7);
-	char *mdb_type_string8 = to_string(MDB_TYPE, string_value);
+	char *mdb_type_string8 = to_string(string_value);
 	printf("String Value: %s\n", mdb_type_string8);
-	char *mdb_type_string9 = to_string(MDB_TYPE, text_value);
+	char *mdb_type_string9 = to_string(text_value);
 	printf("%s\n", mdb_type_string9);
-	char *mdb_type_string10 = to_string(MDB_TYPE, date_value);
+	char *mdb_type_string10 = to_string(date_value);
 	printf("Date Value: %s\n", mdb_type_string10);
-	char *mdb_type_string11 = to_string(MDB_TYPE, time_value);
+	char *mdb_type_string11 = to_string(time_value);
 	printf("Time Value: %s\n", mdb_type_string11);
 
 	const char *key = "KEY";
 	pair_t *pair = new_pair(key, date_value);
-	char *pair_string = to_string(PAIR, pair);
+	char *pair_string = to_string(pair);
 
 	simple_node_t *node = new_simple_node(pair, PAIR);
-	char *node_string = to_string(SIMPLE_NODE, node);
+	char *node_string = to_string(node);
 	printf("Simple Node: %s\n", node_string);
 
 	linked_list_t *list = new_linked_list(PAIR);
 	for(int i = 0; i < 10; i++)
 		linked_list_push(list, new_pair(key, new_mdb_type(&DB_INT, new_int(i))));
-	char *list_string = to_string(LINKED_LIST, list);
+	char *list_string = to_string(list);
 	printf("Linked List: %s\n", list_string);
 
 	hash_map_t *hashMap = new_hash_map();
@@ -67,27 +67,27 @@ int main() {
 	char *strings[4] = {"Brayan", "Tellez", "btellez@example.com", "10-02-2003"};
 	for(int i = 6; i < 10; i++)
 		hash_map_insert(hashMap, new_pair(keys[i], new_mdb_type(&DB_STRING, new_string(strings[i-6]))));
-	char *hash_map_string = to_string(HASH_MAP, hashMap);
+	char *hash_map_string = to_string(hashMap);
 	printf("Hash Map: %s\n", hash_map_string);
 
 	hash_map_t *hashMapFiltered = hash_map_filter(*hashMap, 2, "a", "b");
-	char *hash_map2_string = to_string(HASH_MAP, hashMapFiltered);
+	char *hash_map2_string = to_string(hashMapFiltered);
 	printf("Hash Map Filtered: %s\n", hash_map2_string);
 
 	hash_map_t *hashMapFiltered2 = hash_map_filter(*hashMap, 2, "c", "d");
 	hash_map_t *hashMapFiltered3 = hash_map_filter(*hashMap, 2, "a", "d");
 	hash_map_t *hashMapJoined = hash_map_join(*hashMapFiltered, *hashMapFiltered2);
-	char *hash_map3_string = to_string(HASH_MAP, hashMapJoined);
+	char *hash_map3_string = to_string(hashMapJoined);
 	printf("Hash Map Joined: %s\n", hash_map3_string);
 
 	printf("Los Hash Maps %s y %s son %s\n",
-		to_string(HASH_MAP, hashMapFiltered2), to_string(HASH_MAP, hashMapFiltered3),
+		to_string(hashMapFiltered2), to_string(hashMapFiltered3),
 		compare_hash_map(hashMapFiltered2, hashMapFiltered3) == EQUALS ? "Iguales" : "Diferentes");
 
 	set_t *set1 = new_set(HASH_MAP);
 	set_insert(set1, hashMapFiltered);
 	set_insert(set1, hashMapFiltered2);
-	char *set1_string = to_string(SET, set1);
+	char *set1_string = to_string(set1);
 	printf("Set 1: %s\n", set1_string);
 
 	hash_map_t *hashMapFiltered4 = hash_map_filter(*hashMap, 2, "a", "b");
@@ -97,58 +97,58 @@ int main() {
 	set_t *set2 = new_set(HASH_MAP);
 	set_insert(set2, hashMapFiltered3);
 	set_insert(set2, hashMapFiltered4);
-	char *set2_string = to_string(SET, set2);
+	char *set2_string = to_string(set2);
 	printf("Set 2: %s\n", set2_string);
 
 	set_t *setUnion = set_union(*set1, *set2);
-	char *set_union_string = to_string(SET, setUnion);
+	char *set_union_string = to_string(setUnion);
 	printf("Set Union: %s\n", set_union_string);
 
 	set_t *setIntersection = set_intersection(*set1, *set2);
-	char *set_intersection_string = to_string(SET, setIntersection);
+	char *set_intersection_string = to_string(setIntersection);
 	printf("Set Intersection: %s\n", set_intersection_string);
 
 	set_t *setDiference = set_diference(*set1, *set2);
-	char *set_diference_string = to_string(SET, setDiference);
+	char *set_diference_string = to_string(setDiference);
 	printf("Set diference: %s\n", set_diference_string);
 
 	set_t *setExclusiveDiference = set_exclusive_diference(*set1, *set2);
-	char *set_exclusive_diference_string = to_string(SET, setExclusiveDiference);
+	char *set_exclusive_diference_string = to_string(setExclusiveDiference);
 	printf("Set exclusive diference: %s\n", set_exclusive_diference_string);
 
 	set_t *setCrossProduct = set_cross_product(*set1, *set2);
-	char *set_cross_product_string = to_string(SET, setCrossProduct);
+	char *set_cross_product_string = to_string(setCrossProduct);
 	printf("Set cross_product: %s\n", set_cross_product_string);
 
 	binary_tree_t *tree = new_binary_tree(MDB_TYPE);
 	char *values[10] = { "j", "x", "c", "m", "d", "k", "u", "l", "y", "f" };
 	for(int i = 0; i < 10; i++)
-		binary_tree_insert(tree, new_mdb_type(&DB_STRING, values[i]));
-	char *tree_string = to_string(BINARY_TREE, tree);
+		binary_tree_insert(tree, new_mdb_type(&DB_STRING, new_string(values[i])));
+	char *tree_string = to_string(tree);
 	printf("Binary Tree: %s\n", tree_string);
 
-	result_t *resultFindBT = binary_tree_find(*tree, new_mdb_type(&DB_STRING, values[6]));
+	result_t *resultFindBT = binary_tree_find(*tree, new_mdb_type(&DB_STRING, new_string(values[6])));
 	if(resultFindBT->isSuccess)
 		printf("Find in Binary Tree\n");
 	else
 		printf("%s\n", resultFindBT->error);
 
-	resultFindBT = binary_tree_find(*tree, new_mdb_type(&DB_STRING, "j"));
+	resultFindBT = binary_tree_find(*tree, new_mdb_type(&DB_STRING, new_string("j")));
 	if(resultFindBT->isSuccess)
 		printf("Find in Binary Tree\n");
 	else
 		printf("%s\n", resultFindBT->error);
 
-	binary_tree_delete(tree, new_mdb_type(&DB_STRING, values[6]));
-	char *tree_string_deleted = to_string(BINARY_TREE, tree);
+	binary_tree_delete(tree, new_mdb_type(&DB_STRING, new_string(values[6])));
+	char *tree_string_deleted = to_string(tree);
 	printf("Binary Tree: %s\n", tree_string_deleted);
 
-	binary_tree_delete(tree, new_mdb_type(&DB_STRING, values[4]));
-	char *tree_string_deleted2 = to_string(BINARY_TREE, tree);
+	binary_tree_delete(tree, new_mdb_type(&DB_STRING, new_string(values[4])));
+	char *tree_string_deleted2 = to_string(tree);
 	printf("Binary Tree: %s\n", tree_string_deleted2);
 
-	binary_tree_delete(tree, new_mdb_type(&DB_STRING, values[8]));
-	char *tree_string_deleted3 = to_string(BINARY_TREE, tree);
+	binary_tree_delete(tree, new_mdb_type(&DB_STRING, new_string(values[8])));
+	char *tree_string_deleted3 = to_string(tree);
 	printf("Binary Tree: %s\n", tree_string_deleted3);
 
 	graph_t *graph = new_graph(STRING);
@@ -160,7 +160,7 @@ int main() {
 	int end[10] = { 2, 3, 4, 4, 5, 6, 7, 7, 9, 10 };
 	for(int i = 0; i < 10; i++)
 		graph_insert_edge(graph, begin[i], end[i], values[i]);
-	char *graph_string = to_string(GRAPH, graph);
+	char *graph_string = to_string(graph);
 	printf("Graph: %s\n", graph_string);
 
 	return SUCCESS;

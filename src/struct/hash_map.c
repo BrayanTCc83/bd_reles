@@ -13,6 +13,7 @@ hash_map_t *new_hash_map() {
 	if(HashMap == NULL)
 		PrintError(INSUFICIENT_MEMORY, HASH_MAP_TYPE);
 
+	HashMap->o = HASH_MAP;
 	HashMap->list = (linked_list_t**) malloc(HASH_MAP_SIZE * sizeof(linked_list_t));
 	HashMap->size = 0;
 	int i = 0;
@@ -139,7 +140,7 @@ char *hash_map_to_string(hash_map_t instance) {
 		simple_node_t *reference = list->begin;
 		while(reference != NULL) {
 			pair_t *pair = (pair_t*)reference->value;
-			i += sprintf(string + i, "\"%s\": %s", pair->key, to_string(MDB_TYPE, pair->value));
+			i += sprintf(string + i, "\"%s\": %s", pair->key, to_string(pair->value));
 			reference = reference->next;
 			if(++len < instance.size) {
 				i += sprintf(string + i, ", ");

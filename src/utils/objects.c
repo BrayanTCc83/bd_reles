@@ -4,7 +4,8 @@
 
 static char *DEFAULT_STRING = "Object{}";
 
-void *clone_object(types_t type, void *instance) {
+void *clone_object(void *instance) {
+	types_t type = ((object_t*)instance)->o;
 	switch(type) {
 		case CHAR:
 			return new_char(*((char*)instance));
@@ -45,20 +46,21 @@ void *clone_object(types_t type, void *instance) {
 	return NULL;
 }
 
-char *to_string(types_t type, void *instance) {
+char *to_string(void *instance) {
+	types_t type = ((object_t*)instance)->o;
 	switch(type) {
 		case CHAR:
-			return char_to_string(*(char*)instance);
+			return char_to_string(((Char*)instance)->value);
 		case SHORT:
-			return short_to_string(*((short*)instance));
+			return short_to_string(((Short*)instance)->value);
 		case INT:
-			return int_to_string(*((int*)instance));
+			return int_to_string(((Int*)instance)->value);
 		case FLOAT:
-			return float_to_string(*((float*)instance));
+			return float_to_string(((Float*)instance)->value);
 		case DOUBLE:
-			return double_to_string(*((double*)instance));
+			return double_to_string(((Double*)instance)->value);
 		case STRING:
-			return (char*)instance;
+			return ((String*)instance)->value;
 		case SIMPLE_NODE:
 			return simple_node_to_string(*((simple_node_t*)instance));
 		case BINARY_NODE:
@@ -86,7 +88,8 @@ char *to_string(types_t type, void *instance) {
 	return DEFAULT_STRING;
 }
 
-compare_result_t compare_objects(types_t type, void *obj1, void *obj2) {
+compare_result_t compare_objects(void *obj1, void *obj2) {
+	types_t type = ((object_t*)obj1)->o;
 	switch(type) {
 		case CHAR:
 			return compare_char(*(char*)obj1, *(char*)obj2);
@@ -137,7 +140,8 @@ types_t get_merged_type(types_t originalType) {
 	}
 }
 
-void *merge_objects(types_t type, void *object1, void *object2) {
+void *merge_objects(void *object1, void *object2) {
+	types_t type = ((object_t*)object1)->o;
 	switch(type) {
 		case LINKED_LIST:
 			return linked_list_join(*((linked_list_t*)object1), *((linked_list_t*)object2));

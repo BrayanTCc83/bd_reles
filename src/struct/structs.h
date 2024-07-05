@@ -13,54 +13,63 @@
 // Structs
 // TUPLE
 typedef struct Tuple_t {
+	types_t o;
 	types_t type;
 	void *value1;
 	void *value2;
 } tuple_t;
 // PAIR / TUPLE
 typedef struct Pair_t {
+	types_t o;
 	char key[KEY_MAX_SIZE];
 	mdb_type_t *value;
 } pair_t;
 // SIMPLE NODE
 typedef struct Simple_node_t simple_node_t;
 struct Simple_node_t {
+	types_t o;
 	types_t type;
 	simple_node_t *next;
 	void *value;
 };
 // SIMPLE LINKED LIST
-typedef struct {
+typedef struct Linked_list_t {
+	types_t o;
 	types_t type;
 	simple_node_t *begin;
 	int size;
 } linked_list_t;
 // HASH MAP
 typedef struct Hash_map_t {
+	types_t o;
 	linked_list_t **list;
 	int size;
 } hash_map_t;
 // BINARY NODE
 typedef struct Binary_node_t binary_node_t;
 struct Binary_node_t {
+	types_t o;
 	types_t type;
 	binary_node_t *left, *right;
 	void *value;
 };
 // BINARY TREE
 typedef struct Binary_tree_t {
+	types_t o;
 	types_t type;
 	binary_node_t *root;
 	int size;
 } binary_tree_t;
 // SET
 typedef struct Set_t {
+	types_t o;
 	types_t type;
 	linked_list_t *list;
 } set_t;
 // N NODE
 typedef struct Node_t node_t;
 struct Node_t {
+	types_t o;
 	types_t type;
 	bool isTerminal;
 	int id;
@@ -68,6 +77,7 @@ struct Node_t {
 };
 // GRAPH
 typedef struct Graph_t {
+	types_t o;
 	types_t type;
 	int size;
 	node_t *last;

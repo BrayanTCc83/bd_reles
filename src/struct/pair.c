@@ -11,6 +11,7 @@ pair_t *new_pair(const char *key, mdb_type_t *value) {
 	if(Pair == NULL)
 		PrintError(INSUFICIENT_MEMORY, PAIR_TYPE);
 
+	Pair->o = PAIR;
 	strcpy(Pair->key, key);
 	Pair->value = value;
 	return Pair;
@@ -26,13 +27,13 @@ pair_t *clone_pair(const pair_t pair) {
 
 void delete_pair(pair_t *pair) {
 	delete_mdb_type(pair->value);
-	free(pair->key);
+	strcpy(pair->key, "");
 	free(pair);
 }
 
 char *pair_to_string(pair_t instance) {
 	char *string = (char*) malloc(STRINGIFY_OBJECT_SIZE);
-	char *value = to_string(MDB_TYPE, instance.value);
+	char *value = to_string(instance.value);
 	sprintf(string, "<%s, %s>", instance.key, value);
 	return string;
 }

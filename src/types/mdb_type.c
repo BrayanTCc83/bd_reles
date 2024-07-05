@@ -10,26 +10,27 @@ mdb_type_t *new_mdb_type(data_type_t *type, void *value) {
 	if(reference == NULL)
 		PrintError(INSUFICIENT_MEMORY, "struct mdb_type_t");
 
+	reference->o = MDB_TYPE;
 	reference->type = type;
 	switch(type->group) {
 		case BYTE_VALUE:
 		case CHAR_VALUE:
-			reference->char_value = *((char*)value); break;
+			reference->char_value = ((Char*)value)->value; break;
 		case SHORT_VALUE:
-			reference->short_value = *((short*)value); break;
+			reference->short_value = ((Short*)value)->value; break;
 		case INT_VALUE:
-			reference->int_value = *((int*)value); break;
+			reference->int_value = ((Int*)value)->value; break;
 		case LONG_VALUE:
-			reference->long_value = *((long*)value); break;
+			reference->long_value = ((Long*)value)->value; break;
 		case FLOAT_VALUE:
-			reference->float_value = *((float*)value); break;
+			reference->float_value = ((Float*)value)->value; break;
 		case DOUBLE_VALUE:
-			reference->double_value = *((double*)value); break;
+			reference->double_value = ((Double*)value)->value; break;
 		case STRING_VALUE:
 		case FORMAT_VALUE:
-			strcpy(reference->string_value, (char*)value); break;
+			strcpy(reference->string_value, ((String*)value)->value); break;
 		case TEXT_VALUE:
-			strcpy(reference->text_value, (char*)value); break;
+			strcpy(reference->text_value, ((String*)value)->value); break;
 		default:
 			PrintError("El tipo %i no existe.", type->group);
 	}

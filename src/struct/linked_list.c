@@ -13,6 +13,7 @@ linked_list_t *new_linked_list(types_t type) {
 	if(List == NULL)
 		PrintError(INSUFICIENT_MEMORY, LINKED_LIST_TYPE);
 
+	List->o = LINKED_LIST;
 	List->begin = NULL;
 	List->type = type;
 	List->size = 0;
@@ -38,7 +39,7 @@ compare_result_t compare_linked_list(linked_list_t obj1, linked_list_t obj2) {
 
 	simple_node_t *ref1 = obj1.begin, *ref2 = obj2.begin;
 	while(ref1 != NULL) {
-		if(compare_objects(ref1->type, ref1->value, ref2->value) != EQUALS)
+		if(compare_objects(ref1->value, ref2->value) != EQUALS)
 			return DIFFERENT;
 		ref2 = ref2->next;
 		ref1 = ref1->next;
@@ -92,7 +93,7 @@ result_t *linked_list_delete(linked_list_t *list, void *compare) {
 
 	simple_node_t *previus = NULL;
 	simple_node_t *next = list->begin;
-	while(next != NULL && !compare_objects(list->type, next->value, compare)) {
+	while(next != NULL && !compare_objects(next->value, compare)) {
 		previus = next;
 		next = next->next;
 	}
@@ -110,7 +111,7 @@ result_t *linked_list_delete(linked_list_t *list, void *compare) {
 		list->begin = next->next;
 
 	next->next = NULL;
-	result->value = clone_object(next->type, next->value);
+	result->value = clone_object(next->value);
 	delete_simple_node(next);
 	return result;
 }
@@ -126,7 +127,7 @@ result_t *linked_list_get(linked_list_t list, void *compare) {
 
 	simple_node_t *reference = list.begin;
 	simple_node_t *next = list.begin->next;
-	while(reference != NULL && compare_objects(list.type, reference->value, compare) != EQUALS) {
+	while(reference != NULL && compare_objects(reference->value, compare) != EQUALS) {
 		reference = next;
 		if(next != NULL)
 			next = next->next;
@@ -159,7 +160,7 @@ char *linked_list_to_string(linked_list_t list) {
 
 	cadena[i++] = '[';
 	while(reference != NULL) {
-		i += sprintf(cadena + i, "%s", to_string(list.type, reference->value));
+		i += sprintf(cadena + i, "%s", to_string(reference->value));
 		reference = reference->next;
 		if(reference != NULL) {
 			cadena[i++] = ',';
