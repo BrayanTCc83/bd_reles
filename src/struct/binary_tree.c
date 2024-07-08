@@ -111,7 +111,7 @@ compare_result_t compare_binary_tree(binary_tree_t tree1, binary_tree_t tree2) {
 }
 
 result_t *binary_tree_insert(binary_tree_t *tree, void *value) {
-	result_t *result = new_result(TRUE, true, NO_ERROR);
+	result_t *result = new_result();
 
 	binary_node_t *newNode = new_binary_node(value, tree->type);
 	if(tree->root == NULL) {
@@ -129,17 +129,12 @@ result_t *binary_tree_insert(binary_tree_t *tree, void *value) {
 			reference = reference->right;
 		else if(cmp == GREAT)
 			reference = reference->left;
-		else {
-			result->isSuccess = false;
-			strcmp(result->error, "El elemento ya se encuentra dentro del arbol.");
-			return result;
-		}
+		else
+			return result_set_error(result, "El elemento ya se encuentra dentro del arbol.");
 	}
 
-	if(previus == NULL) {
-		result->value = FALSE;
-		return result;
-	}
+	if(previus == NULL)
+		return result_set_error(result, "Error al insertar el elemento.");
 
 	if(cmp == GREAT)
 		previus->left = newNode;
@@ -151,12 +146,9 @@ result_t *binary_tree_insert(binary_tree_t *tree, void *value) {
 }
 
 result_t *binary_tree_find(binary_tree_t tree, void *value) {
-	result_t *result = new_result(NULL, true, NO_ERROR);
-	if(tree.size == 0) {
-		result->isSuccess = false;
-		strcpy(result->error, TREE_IS_VOID);
-		return result;
-	}
+	result_t *result = new_result();
+	if(tree.size == 0)
+		return result_set_error(result, TREE_IS_VOID);
 
 	binary_node_t *reference = tree.root;
 	compare_result_t cmp = DIFFERENT;
@@ -165,14 +157,10 @@ result_t *binary_tree_find(binary_tree_t tree, void *value) {
 		else reference = reference->left;
 	}
 
-	if(reference == NULL) {
-		result->isSuccess = false;
-		strcpy(result->error, TREE_NOT_CONTAINS_ITEM);
-		return result;
-	}
+	if(reference == NULL)
+		return result_set_error(result, TREE_NOT_CONTAINS_ITEM);
 
-	result->value = clone_object(reference->value);
-	return result;
+	return result_set_value(result, clone_object(reference->value));
 }
 
 static void _binary_tree_sort_recursive(binary_node_t *parent, binary_node_t *child) {
@@ -196,12 +184,9 @@ static void _binary_tree_sort_recursive(binary_node_t *parent, binary_node_t *ch
 }
 
 result_t *binary_tree_delete(binary_tree_t *tree, void *value) {
-	result_t *result = new_result(NULL, true, NO_ERROR);
-	if(tree->size == 0) {
-		result->isSuccess = false;
-		strcpy(result->error, TREE_IS_VOID);
-		return result;
-	}
+	result_t *result = new_result();
+	if(tree->size == 0)
+		return result_set_error(result, TREE_IS_VOID);
 
 	binary_node_t *reference = tree->root, *parent = NULL;
 	compare_result_t cmp = DIFFERENT;
@@ -211,11 +196,8 @@ result_t *binary_tree_delete(binary_tree_t *tree, void *value) {
 		else reference = reference->left;
 	}
 
-	if(reference == NULL) {
-		result->isSuccess = false;
-		strcpy(result->error, TREE_NOT_CONTAINS_ITEM);
-		return result;
-	}
+	if(reference == NULL)
+		return result_set_error(result, TREE_NOT_CONTAINS_ITEM);
 
 	binary_node_t *child = reference->left;
 	if(parent == NULL)
@@ -231,7 +213,7 @@ result_t *binary_tree_delete(binary_tree_t *tree, void *value) {
 	reference->left = reference->right = NULL;
 	_binary_tree_sort_recursive(parent, child);
 
-	result->value = clone_object(reference->value);
+	result_set_value(result, clone_object(reference->value));
 	delete_binary_node(reference);
 	return result;
 }

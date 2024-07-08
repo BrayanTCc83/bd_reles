@@ -15,6 +15,7 @@ typedef enum Compare_result_t {
 	LESS = -1,
 	EQUALS = 0,
 	GREAT = 1,
+	CONTAINS,
 	DIFFERENT
 } compare_result_t;
 // MDB TYPES
@@ -32,7 +33,12 @@ typedef enum Types_t {
 	TUPLE, PAIR,
 	// Data Structs
 	LINKED_LIST, HASH_MAP, SET,
-	BINARY_TREE, GRAPH
+	BINARY_TREE, GRAPH,
+	// Data Base Basics
+	CONDITION, COLUMN,
+	// Data Base Objects
+	SEQUENCE, USER, SESSION, SCHEMA, ROLE,
+	TABLE, VIEW, INDEX, PROCEDURE
 } types_t;
 
 // Macros
@@ -99,7 +105,9 @@ typedef struct String_t {
 
 // Functions
 // RESULT
-result_t *new_result(void*, bool, const char*);
+result_t *new_result();
+result_t *result_set_error(result_t*, const char*);
+result_t *result_set_value(result_t*, void*);
 // OBJECT METHODS
 compare_result_t compare_objects(void*, void*);
 void *merge_objects(void*, void*);

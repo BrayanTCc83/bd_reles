@@ -41,16 +41,14 @@ void delete_set(set_t *set) {
 }
 
 result_t *set_insert(set_t *set, void *value) {
-	result_t *result = new_result(TRUE, true, NO_ERROR);
+	result_t *result = new_result();
 
 	simple_node_t *reference = set->list->begin;
 	while(reference != NULL && compare_objects(reference->value, value) != EQUALS)
 		reference = reference->next;
 
-	if(reference != NULL) {
-		result->value = FALSE;
-		return result;
-	}
+	if(reference != NULL)
+		return result_set_error(result, "Ha ocurrido un error al realizar la insercion.");
 	return linked_list_push(set->list, value);
 }
 

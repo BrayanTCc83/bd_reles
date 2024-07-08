@@ -40,29 +40,23 @@ void delete_node(node_t *node) {
 }
 
 result_t *node_insert_child(node_t *node, pair_t *child) {
-	result_t *result = new_result(NULL, true, NO_ERROR);
+	result_t *result = new_result();
 	linked_list_push(node->children, child);
 	return result;
 }
 
 result_t *node_remove_child_by_weight(node_t *node, void *weight) {
-	result_t *result = new_result(NULL, true, NO_ERROR);
-	if(!node->children->size) {
-		result->isSuccess = false;
-		strcpy(result->error, "El nodo no contiene hijos.");
-		return result;
-	}
+	result_t *result = new_result();
+	if(!node->children->size)
+		return result_set_error(result, "El nodo no contiene hijos.");
 
 	return linked_list_delete(node->children, weight);
 }
 
 result_t *node_remove_child_by_id(node_t *node, int id) {
-	result_t *result = new_result(NULL, true, NO_ERROR);
-	if(node->children == 0) {
-		result->isSuccess = false;
-		strcpy(result->error, "El nodo no contiene hijos.");
-		return result;
-	}
+	result_t *result = new_result();
+	if(node->children == 0)
+		return result_set_error(result, "El nodo no contiene hijos.");
 
 	int i = 0;
 	simple_node_t *reference = node->children->begin;
@@ -72,20 +66,17 @@ result_t *node_remove_child_by_id(node_t *node, int id) {
 		reference == reference->next;
 	}
 
-	if(reference == NULL) {
-		result->isSuccess = false;
-		strcpy(result->error, "El nodo no tiene ningun hijo con la id especificada.");
-	}
+	if(reference == NULL)
+		return result_set_error(result, "El nodo no tiene ningun hijo con la id especificada.");
 
 	return linked_list_delete(node->children, ((pair_t*)reference->value)->key);
 }
 
 result_t *node_clear_children(node_t *node) {
-	result_t *result = new_result(TRUE, true, NO_ERROR);
-	if(!node->children) {
-		result->value = FALSE;
-		return result;
-	}
+	result_t *result = new_result();
+	if(!node->children)
+		return result_set_error(result, "El nodo no contiene hijos");
+
 	delete_linked_list(node->children);
 	node->children = new_linked_list(PAIR);
 	return result;

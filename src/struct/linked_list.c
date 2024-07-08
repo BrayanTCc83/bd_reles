@@ -60,7 +60,7 @@ void delete_linked_list(linked_list_t *list) {
 
 result_t *linked_list_push(linked_list_t *list, void* value) {
 	simple_node_t *node = new_simple_node(value, list->type);
-	result_t *result = new_result((void*)TRUE, true, NO_ERROR);
+	result_t *result = new_result();
 	if(list->size == 0) {
 		list->begin = node;
 		list->size++;
@@ -71,11 +71,8 @@ result_t *linked_list_push(linked_list_t *list, void* value) {
 	while(reference->next != NULL)
 		reference = reference->next;
 
-	if(reference == NULL) {
-		strcpy(result->error, INVALID_REFERENCE);
-		result->isSuccess = false;
-		return result;
-	}
+	if(reference == NULL)
+		return result_set_error(result, INVALID_REFERENCE);
 
 	reference->next = node;
 	list->size++;
@@ -83,13 +80,10 @@ result_t *linked_list_push(linked_list_t *list, void* value) {
 }
 
 result_t *linked_list_delete(linked_list_t *list, void *compare) {
-	result_t *result = new_result(NULL, true, NO_ERROR);
+	result_t *result = new_result();
 
-	if(list->size == 0) {
-		result->isSuccess = false;
-		strcpy(result->error, INVALID_REFERENCE);
-		return result;
-	}
+	if(list->size == 0)
+		return result_set_error(result, INVALID_REFERENCE);
 
 	simple_node_t *previus = NULL;
 	simple_node_t *next = list->begin;
@@ -98,11 +92,8 @@ result_t *linked_list_delete(linked_list_t *list, void *compare) {
 		next = next->next;
 	}
 
-	if(next == NULL) {
-		result->isSuccess = false;
-		strcpy(result->error, INVALID_REFERENCE);
-		return result;
-	}
+	if(next == NULL)
+		return result_set_error(result, INVALID_REFERENCE);
 
 	list->size--;
 	if(previus != NULL)
@@ -111,19 +102,16 @@ result_t *linked_list_delete(linked_list_t *list, void *compare) {
 		list->begin = next->next;
 
 	next->next = NULL;
-	result->value = clone_object(next->value);
+	result_set_value(result, clone_object(next->value));
 	delete_simple_node(next);
 	return result;
 }
 
 result_t *linked_list_get(linked_list_t list, void *compare) {
-	result_t *result = new_result(NULL, true, NO_ERROR);
+	result_t *result = new_result();
 
-	if(list.size == 0) {
-		result->isSuccess = false;
-		strcpy(result->error, INVALID_REFERENCE);
-		return result;
-	}
+	if(list.size == 0)
+		return result_set_error(result, INVALID_REFERENCE);
 
 	simple_node_t *reference = list.begin;
 	simple_node_t *next = list.begin->next;
@@ -133,14 +121,9 @@ result_t *linked_list_get(linked_list_t list, void *compare) {
 			next = next->next;
 	}
 
-
-	if(reference == NULL) {
-		result->isSuccess = false;
-		strcpy(result->error, INVALID_REFERENCE);
-		return result;
-	}
-	result->value = reference->value;
-	return result;
+	if(reference == NULL)
+		return result_set_error(result, INVALID_REFERENCE);
+	return result_set_value(result, reference->value);
 }
 
 linked_list_t *linked_list_join(linked_list_t list1, linked_list_t list2) {
