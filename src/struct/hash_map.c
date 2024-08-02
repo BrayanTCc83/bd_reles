@@ -73,6 +73,16 @@ result_t *hash_map_insert(hash_map_t *map, pair_t *pair) {
 	return result;
 }
 
+result_t *hash_map_replace(hash_map_t *map, pair_t *pair) {
+	result_t *result = hash_map_find(*map, pair->key);
+	if(!result->isSuccess)
+		return hash_map_insert(map, pair);
+
+	int hash = string_hash(pair->key);
+	linked_list_t *list = map->list[hash % HASH_MAP_SIZE];
+	return linked_list_replace(list, pair->key, pair);
+}
+
 result_t *hash_map_delete(hash_map_t *map, const char *key) {
 	int hash = string_hash(key);
 	linked_list_t *list = map->list[hash % HASH_MAP_SIZE];
@@ -86,6 +96,20 @@ result_t *hash_map_find(hash_map_t map, const char *key) {
 	int hash = string_hash(key);
 	linked_list_t *list = map.list[hash % HASH_MAP_SIZE];
 	return linked_list_get(*list, (char*)key);
+}
+
+linked_list_t *hash_map_to_list(hash_map_t map) {
+	linked_list_t *List = new_linked_list(PAIR);
+	for(int j = 0; j < HASH_MAP_SIZE; j++) {
+		linked_list_t *list = map.list[j];
+		simple_node_t *reference = list->begin;
+		while(reference != NULL) {
+			pair_t *pair = (pair_t*)reference->value;
+			linked_list_push(List, pair);
+			reference = reference->next;
+		}
+	}
+	return List;
 }
 
 hash_map_t *hash_map_filter(hash_map_t map, int n,...) {
@@ -140,7 +164,7 @@ char *hash_map_to_string(hash_map_t instance) {
 		simple_node_t *reference = list->begin;
 		while(reference != NULL) {
 			pair_t *pair = (pair_t*)reference->value;
-			i += sprintf(string + i, "\"%s\": %s", pair->key, to_string(pair->value));
+			i += sprintf(string + i, "\"%s\": %s", pair->key, pair->value ? to_string(pair->value) : "null");
 			reference = reference->next;
 			if(++len < instance.size) {
 				i += sprintf(string + i, ", ");

@@ -26,14 +26,15 @@ pair_t *clone_pair(const pair_t pair) {
 }
 
 void delete_pair(pair_t *pair) {
-	delete_mdb_type(pair->value);
+	if(pair->value)
+		delete_mdb_type(pair->value);
 	strcpy(pair->key, "");
 	free(pair);
 }
 
 char *pair_to_string(pair_t instance) {
 	char *string = (char*) malloc(STRINGIFY_OBJECT_SIZE);
-	char *value = to_string(instance.value);
-	sprintf(string, "<%s, %s>", instance.key, value);
+	char *value = instance.value ? to_string(instance.value) : "null";
+	sprintf(string, "<\"%s\", %s>", instance.key, value);
 	return string;
 }

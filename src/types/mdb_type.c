@@ -4,8 +4,12 @@
 #include "../utils/utils.h"
 
 extern const char*INSUFICIENT_MEMORY;
+extern data_type_t DB_DATE;
 
 mdb_type_t *new_mdb_type(data_type_t *type, void *value) {
+	if(value == NULL)
+		return NULL;
+
 	mdb_type_t *reference = (mdb_type_t*) malloc(sizeof(mdb_type_t));
 	if(reference == NULL)
 		PrintError(INSUFICIENT_MEMORY, "struct mdb_type_t");
@@ -94,10 +98,13 @@ compare_result_t compare_mdb_value(mdb_type_t *value1, mdb_type_t *value2) {
 			return value1->double_value == value2->double_value ? EQUALS
 				: value1->double_value > value2->double_value ? GREAT : LESS;
 		case STRING_VALUE:
-		case FORMAT_VALUE:
 			return strcmp(value1->string_value, value2->string_value);
 		case TEXT_VALUE:
 			return strcmp(value1->text_value, value2->text_value);
+		case FORMAT_VALUE:
+			if(value1->type == &DB_DATE)
+				return compare_date_type(value1->string_value, value2->string_value);
+			return DIFFERENT;
 	}
 }
 

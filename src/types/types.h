@@ -45,5 +45,7 @@ compare_result_t compare_mdb_value(mdb_type_t*, mdb_type_t*);
 mdb_type_t *clone_mdb_type(mdb_type_t);
 void delete_mdb_type(mdb_type_t*);
 char *mdb_type_to_string(mdb_type_t);	// 	A
+// Data types formated default compare
+compare_result_t compare_date_type(const char*, const char*);
 
 #endif

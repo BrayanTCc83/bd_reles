@@ -61,6 +61,9 @@ Double *new_double(double real) {
 }
 
 String *new_string(const char *string) {
+	if(string == NULL || strlen(string) == 0)
+		return NULL;
+
 	String *NewString = (String*) malloc(sizeof(String));
 	if(NewString == NULL)
 		PrintError(INSUFICIENT_MEMORY, INTEGER_TYPE);

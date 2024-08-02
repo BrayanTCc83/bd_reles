@@ -36,7 +36,7 @@ struct Simple_node_t {
 typedef struct Linked_list_t {
 	types_t o;
 	types_t type;
-	simple_node_t *begin;
+	simple_node_t *begin, *end;
 	int size;
 } linked_list_t;
 // HASH MAP
@@ -112,6 +112,7 @@ linked_list_t *clone_linked_list(const linked_list_t);
 compare_result_t compare_linked_list(linked_list_t, linked_list_t);
 void delete_linked_list(linked_list_t*);
 result_t *linked_list_push(linked_list_t*, void*);
+result_t *linked_list_replace(linked_list_t*, void*, void*);
 result_t *linked_list_delete(linked_list_t*, void*);
 result_t *linked_list_get(linked_list_t, void*);
 linked_list_t *linked_list_join(linked_list_t, linked_list_t);
@@ -122,8 +123,10 @@ compare_result_t compare_hash_map(hash_map_t*, hash_map_t*);
 hash_map_t *clone_hash_map(const hash_map_t);
 void delete_hash_map(hash_map_t*);
 result_t *hash_map_insert(hash_map_t*, pair_t*);
+result_t *hash_map_replace(hash_map_t*, pair_t*);
 result_t *hash_map_delete(hash_map_t*, const char*);
 result_t *hash_map_find(hash_map_t, const char*);
+linked_list_t *hash_map_to_list(hash_map_t);
 hash_map_t *hash_map_filter(hash_map_t, int, ...);
 hash_map_t *hash_map_join(hash_map_t, hash_map_t);
 char *hash_map_to_string(hash_map_t);		// { key1: value1, key2: value2, ... }

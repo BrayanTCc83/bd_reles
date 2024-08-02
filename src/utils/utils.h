@@ -21,8 +21,8 @@ typedef enum Compare_result_t {
 // MDB TYPES
 typedef enum Types_t {
 	UNKNOWN_TYPE,
-	// Result
-	RESULT,
+	// Patterns
+	RESULT, ITERATOR,
 	// Primitives
 	CHAR, SHORT, INT, LONG, FLOAT, DOUBLE, BOOL,
 	STRING,
@@ -35,7 +35,7 @@ typedef enum Types_t {
 	LINKED_LIST, HASH_MAP, SET,
 	BINARY_TREE, GRAPH,
 	// Data Base Basics
-	CONDITION, COLUMN,
+	CONDITION, COLUMN, FUNCTION,
 	// Data Base Objects
 	SEQUENCE, USER, SESSION, SCHEMA, ROLE,
 	TABLE, VIEW, INDEX, PROCEDURE
@@ -44,7 +44,7 @@ typedef enum Types_t {
 // Macros
 #define PrintError(format, ...)  {printf(format, __VA_ARGS__); exit(1);}
 #define Stringify(type) 	 #type
-#define Typify(x) 		 _Generic((x), 					\
+	#define Typify(x) 		 _Generic((x), 					\
 		bool: BOOL,			char: CHAR, 			\
 		short: SHORT, 			int: INT, 			\
 		long: LONG,			float: FLOAT,			\
@@ -114,6 +114,7 @@ void *merge_objects(void*, void*);
 types_t get_merged_type(types_t);
 void *clone_object(void*);
 char *to_string(void*);
+void *to_list(object_t*);
 // PRIMITIVES
 Char *new_char(char);
 Short *new_short(short);

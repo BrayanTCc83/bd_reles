@@ -1,4 +1,5 @@
 #include <string.h>
+#include "../models/models.h"
 #include "../struct/structs.h"
 #include "utils.h"
 
@@ -41,6 +42,10 @@ void *clone_object(void *instance) {
 			return clone_binary_tree(*((binary_tree_t*)instance));
 		case GRAPH:
 			return clone_graph(*((graph_t*)instance));
+		case FUNCTION:
+			return clone_function(*((function_t*)instance));
+		case SEQUENCE:
+			return clone_sequence(*((sequence_t*)instance));
 		default:;
 	}
 	return NULL;
@@ -83,9 +88,32 @@ char *to_string(void *instance) {
 			return binary_tree_to_string(*((binary_tree_t*)instance));
 		case GRAPH:
 			return graph_to_string(*((graph_t*)instance));
+		case FUNCTION:
+			return function_to_string(*((function_t*)instance));
+		case CONDITION:
+			return condition_to_string(*((condition_t*)instance));
+		case COLUMN:
+			return column_to_string(*((column_t*)instance));
+		case TABLE:
+			return table_to_string(*((table_t*)instance));
 		default:;
 	}
 	return DEFAULT_STRING;
+}
+
+void *to_list(object_t *instance) {
+	types_t type = ((object_t*)instance)->o;
+	switch(type) {
+		case LINKED_LIST:
+			return instance;
+		case HASH_MAP:
+			return hash_map_to_list(*(hash_map_t*)instance);
+		case SET:
+			return ((set_t*)instance)->list;
+	}
+	linked_list_t *list = new_linked_list(instance->o);
+	linked_list_push(list, instance);
+	return list;
 }
 
 compare_result_t compare_objects(void *obj1, void *obj2) {
@@ -102,7 +130,7 @@ compare_result_t compare_objects(void *obj1, void *obj2) {
 		case DOUBLE:
 			return compare_double(*(double*)obj1, *(double*)obj2);
 		case STRING:
-			return strcmp((char*)obj1, (char*)obj2);
+			return strcmp(((String*)obj1)->value, ((String*)obj2)->value);
 		case MDB_TYPE:
 			return compare_mdb_value((mdb_type_t*)obj1, (mdb_type_t*)obj2);
 		case SIMPLE_NODE:
@@ -125,6 +153,8 @@ compare_result_t compare_objects(void *obj1, void *obj2) {
 			return compare_binary_tree(*(binary_tree_t*)obj1, *(binary_tree_t*)obj2);
 		case GRAPH:
 			return compare_graph(*(graph_t*)obj1, *(graph_t*)obj2);
+		case COLUMN:
+			return compare_column(*(column_t*)obj1, (const char*)obj2);
 		default:;
 	}
 	return DIFFERENT;

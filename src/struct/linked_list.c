@@ -5,7 +5,6 @@
 #include "structs.h"
 
 extern const char *INSUFICIENT_MEMORY, *LINKED_LIST_TYPE, *NO_ERROR, *INVALID_REFERENCE;
-extern const bool *TRUE, *FALSE;
 
 linked_list_t *new_linked_list(types_t type) {
 	linked_list_t *List = (linked_list_t*) malloc(sizeof(linked_list_t));
@@ -14,7 +13,7 @@ linked_list_t *new_linked_list(types_t type) {
 		PrintError(INSUFICIENT_MEMORY, LINKED_LIST_TYPE);
 
 	List->o = LINKED_LIST;
-	List->begin = NULL;
+	List->begin = List->end = NULL;
 	List->type = type;
 	List->size = 0;
 
@@ -54,7 +53,7 @@ void delete_linked_list(linked_list_t *list) {
 		delete_simple_node(reference);
 		reference = list->begin;
 	}
-	list->begin = NULL;
+	list->begin = list->end = NULL;
 	list->size = 0;
 }
 
@@ -62,26 +61,47 @@ result_t *linked_list_push(linked_list_t *list, void* value) {
 	simple_node_t *node = new_simple_node(value, list->type);
 	result_t *result = new_result();
 	if(list->size == 0) {
-		list->begin = node;
+		list->begin = list->end = node;
 		list->size++;
 		return result;
 	}
 
-	simple_node_t *reference = list->begin;
-	while(reference->next != NULL)
-		reference = reference->next;
+	list->end->next = node;
+	list->end = node;
+	list->size++;
+	return result;
+}
 
-	if(reference == NULL)
+result_t *linked_list_replace(linked_list_t *list, void *compare, void *value) {
+	simple_node_t *node = new_simple_node(value, list->type);
+	result_t *result = new_result();
+	if(list->size == 0)
+		return result_set_error(result, "La lista esta vacia.");
+
+	simple_node_t *previus = NULL;
+	simple_node_t *next = list->begin;
+	while(next != NULL && compare_objects(next->value, compare) != EQUALS) {
+		previus = next;
+		next = next->next;
+	}
+
+	if(next == NULL)
 		return result_set_error(result, INVALID_REFERENCE);
 
-	reference->next = node;
-	list->size++;
+	if(previus != NULL)
+		previus->next = node;
+	else
+		list->begin = node;
+
+	node->next = next->next;
+	next->next = NULL;
+	result_set_value(result, clone_object(next->value));
+	delete_simple_node(next);
 	return result;
 }
 
 result_t *linked_list_delete(linked_list_t *list, void *compare) {
 	result_t *result = new_result();
-
 	if(list->size == 0)
 		return result_set_error(result, INVALID_REFERENCE);
 
@@ -117,10 +137,9 @@ result_t *linked_list_get(linked_list_t list, void *compare) {
 	simple_node_t *next = list.begin->next;
 	while(reference != NULL && compare_objects(reference->value, compare) != EQUALS) {
 		reference = next;
-		if(next != NULL)
+		if(next)
 			next = next->next;
 	}
-
 	if(reference == NULL)
 		return result_set_error(result, INVALID_REFERENCE);
 	return result_set_value(result, reference->value);
@@ -143,7 +162,7 @@ char *linked_list_to_string(linked_list_t list) {
 
 	cadena[i++] = '[';
 	while(reference != NULL) {
-		i += sprintf(cadena + i, "%s", to_string(reference->value));
+		i += sprintf(cadena + i, "%s", reference->value ? to_string(reference->value) : "null");
 		reference = reference->next;
 		if(reference != NULL) {
 			cadena[i++] = ',';
